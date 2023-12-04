@@ -10,9 +10,13 @@ from rest_framework import status
 class CategoryListView(APIView):
     def get(self,request):
         all_category  = Category.objects.all()
-        serilizers = CategorySerializer(all_category,many=True)
-        return Response(serilizers.data)
-
+        serilizers = CategorySerializer(all_category,many=True,context={'request': request})
+        return Response(serilizers.data,status=status.HTTP_200_OK)
+class CategoryDetailsView(APIView):
+    def get (self, request,pk):
+        single_category =Category.objects.get(pk=pk)
+        serializers = CategorySerializer(single_category,context={'request': request})
+        return Response(serializers.data)
 # Get get_all,post
 class BlogListView(APIView):
     def get(self,request):
@@ -50,13 +54,13 @@ class BlogDetailsView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 
-from rest_framework import generics
-class GenericBlogListView(generics.ListCreateAPIView):
-    queryset = Blog.objects.filter(is_public=True)
-    serializer_class = BlogSerialiizer
-class GenericBlogDetailsView(generics.RetrieveUpdateAPIView,generics.ListCreateAPIView):
-    queryset = Blog.objects.all()
-    serializer_class = BlogSerialiizer
+# from rest_framework import generics
+# class GenericBlogListView(generics.ListCreateAPIView):
+#     queryset = Blog.objects.filter(is_public=True)
+#     serializer_class = BlogSerialiizer
+# class GenericBlogDetailsView(generics.RetrieveUpdateAPIView,generics.ListCreateAPIView):
+#     queryset = Blog.objects.all()
+#     serializer_class = BlogSerialiizer
 
 
 
