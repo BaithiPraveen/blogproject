@@ -54,23 +54,15 @@ class BlogDetailsView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 
-# from rest_framework import generics
-# class GenericBlogListView(generics.ListCreateAPIView):
-#     queryset = Blog.objects.filter(is_public=True)
-#     serializer_class = BlogSerialiizer
-# class GenericBlogDetailsView(generics.RetrieveUpdateAPIView,generics.ListCreateAPIView):
-#     queryset = Blog.objects.all()
-#     serializer_class = BlogSerialiizer
+from rest_framework import generics
+class GenericBlogListView(generics.ListCreateAPIView):
+    queryset = Blog.objects.filter(is_public=True)
+    serializer_class = BlogSerialiizer
+class GenericBlogDetailsView(generics.RetrieveUpdateAPIView,generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerialiizer
 
 
-
-# class GenericBlogDetailsView(generics.ListCreateAPIView):
-#     serializer_class = BlogSerialiizer
-#     def get_queryset(self):
-#         pk = self.request.GET.get('pk')
-#         if pk is not None:
-#             return Blog.objects.filter(pk=pk)
-#         return Blog.objects.all()
 
 
 
