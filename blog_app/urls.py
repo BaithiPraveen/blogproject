@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import BlogListView,BlogDetailsView,CategoryListView,CategoryDetailsView,GenericBlogListView,GenericBlogDetailsView
+from .views import BlogListView,BlogDetailsView,CategoryListView,CategoryDetailsView,GenericBlogListView,GenericBlogDetailsView,Mixnsviews,Mixnsviews2
 
 urlpatterns = [
    # cls based views
@@ -14,5 +14,11 @@ urlpatterns = [
 
    #genericview in RetrieveUpdateAPIView
    path("generic_views_blog_details/<int:pk>/",GenericBlogDetailsView.as_view(),name="generic_views_blog_details"),
+
+   #Mixnsviews
+   path("mixin_views_blog_list/",Mixnsviews.as_view(),name="mixin_views_blog_list"),
+   path("mixin_views2_blog_list/<int:pk>",Mixnsviews2.as_view(),name="mixin_views_blog_list"),
+
+
 
 ]

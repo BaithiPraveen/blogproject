@@ -53,8 +53,34 @@ class BlogDetailsView(APIView):
         blog =Blog.objects.get(pk=pk).delete()
         return Response(status=status.HTTP_200_OK)
     
-
 from rest_framework import generics
+from rest_framework import mixins
+
+class Mixnsviews(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerialiizer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+class Mixnsviews2(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  generics.GenericAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerialiizer
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
 class GenericBlogListView(generics.ListCreateAPIView):
     queryset = Blog.objects.filter(is_public=True)
     serializer_class = BlogSerialiizer
