@@ -10,9 +10,13 @@ from rest_framework import status
 class CategoryListView(APIView):
     def get(self,request):
         all_category  = Category.objects.all()
-        serilizers = CategorySerializer(all_category,many=True)
-        return Response(serilizers.data)
-
+        serilizers = CategorySerializer(all_category,many=True,context={'request': request})
+        return Response(serilizers.data,status=status.HTTP_200_OK)
+class CategoryDetailsView(APIView):
+    def get (self, request,pk):
+        single_category =Category.objects.get(pk=pk)
+        serializers = CategorySerializer(single_category,context={'request': request})
+        return Response(serializers.data)
 # Get get_all,post
 class BlogListView(APIView):
     def get(self,request):
@@ -49,8 +53,34 @@ class BlogDetailsView(APIView):
         blog =Blog.objects.get(pk=pk).delete()
         return Response(status=status.HTTP_200_OK)
     
-
 from rest_framework import generics
+from rest_framework import mixins
+
+class Mixnsviews(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerialiizer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+class Mixnsviews2(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  generics.GenericAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerialiizer
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
 class GenericBlogListView(generics.ListCreateAPIView):
     queryset = Blog.objects.filter(is_public=True)
     serializer_class = BlogSerialiizer
@@ -59,14 +89,6 @@ class GenericBlogDetailsView(generics.RetrieveUpdateAPIView,generics.ListCreateA
     serializer_class = BlogSerialiizer
 
 
-
-# class GenericBlogDetailsView(generics.ListCreateAPIView):
-#     serializer_class = BlogSerialiizer
-#     def get_queryset(self):
-#         pk = self.request.GET.get('pk')
-#         if pk is not None:
-#             return Blog.objects.filter(pk=pk)
-#         return Blog.objects.all()
 
 
 
