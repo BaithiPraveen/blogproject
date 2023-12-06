@@ -67,13 +67,16 @@ class Mixnsviews(mixins.ListModelMixin,
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    
+# it is based on fields or lookup_field 
 class Mixnsviews2(mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   mixins.DestroyModelMixin,
                   generics.GenericAPIView):
+    
     queryset = Blog.objects.all()
     serializer_class = BlogSerialiizer
+    lookup_field = 'slug' # lookup_field
+
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
     def put(self, request, *args, **kwargs):
@@ -81,12 +84,30 @@ class Mixnsviews2(mixins.RetrieveModelMixin,
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+
+
+# its based pk 
+# class Mixnsviews2(mixins.RetrieveModelMixin,
+#                   mixins.UpdateModelMixin,
+#                   mixins.DestroyModelMixin,
+#                   generics.GenericAPIView):
+#     queryset = Blog.objects.all()
+#     serializer_class = BlogSerialiizer
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
 class GenericBlogListView(generics.ListCreateAPIView):
     queryset = Blog.objects.filter(is_public=True)
     serializer_class = BlogSerialiizer
-class GenericBlogDetailsView(generics.RetrieveUpdateAPIView,generics.ListCreateAPIView):
+    lookup_field ="blog_title"
+class GenericBlogDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerialiizer
+    lookup_field="slug"
 
 
 

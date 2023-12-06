@@ -12,13 +12,15 @@ urlpatterns = [
    #genricviews in listcreated view
    path("generic_views_blog_list/",GenericBlogListView.as_view(),name="generic_blog_details"),
 
-   #genericview in RetrieveUpdateAPIView
-   path("generic_views_blog_details/<int:pk>/",GenericBlogDetailsView.as_view(),name="generic_views_blog_details"),
+   #genericview in RetrieveUpdateDestroyAPIView
+   path("generic_views_blog_details/<str:slug>/",GenericBlogDetailsView.as_view(),name="generic_views_blog_details"),
 
-   #Mixnsviews
+   #Mixnsviews create,get_list
    path("mixin_views_blog_list/",Mixnsviews.as_view(),name="mixin_views_blog_list"),
-   path("mixin_views2_blog_list/<int:pk>",Mixnsviews2.as_view(),name="mixin_views_blog_list"),
 
+   # Mixnsviews get,update,delete 1 record
+   # path("mixin_views2_blog_list/<int:pk>",Mixnsviews2.as_view(),name="mixin_views_blog_list"),
+   path("mixin_views2_blog_list/<str:slug>",Mixnsviews2.as_view(),name="mixin_views_blog_list"),
 
 
 ]
